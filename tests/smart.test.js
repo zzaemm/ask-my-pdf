@@ -3,24 +3,7 @@ import assert from 'node:assert/strict';
 import { buildIndex } from '../docs/js/answer.js';
 import { embedIndex, askSmart, MIN_SIMILARITY } from '../docs/js/smart.js';
 import { createEmbedder } from '../docs/js/embed.js';
-import { tokenize } from '../docs/js/tokenize.js';
-
-// A stand-in for the real model: hashed bag of words, with a few made-up "synonyms"
-// so that wording differences (hot / temperature) are bridged the way an embedding would.
-const SYNONYMS = { hot: 'temperature', degrees: 'temperature', celsius: 'temperature', rise: 'proof', rest: 'proof' };
-const DIM = 4096; // large enough that unrelated words do not collide
-const hash = (w) => [...w].reduce((h, c) => (h * 31 + c.charCodeAt(0)) >>> 0, 7) % DIM;
-const fakeEmbedder = {
-  model: 'fake',
-  async embed(texts) {
-    return texts.map((t) => {
-      const v = new Float32Array(DIM);
-      for (const w of tokenize(t)) v[hash(SYNONYMS[w] ?? w)] += 1;
-      const norm = Math.hypot(...v) || 1;
-      return v.map((x) => x / norm);
-    });
-  },
-};
+import { fakeEmbedder } from './helpers.js';
 
 const pages = [
   { page: 1, text: 'Oven\n\nPreheat the oven to 250 degrees Celsius for 45 minutes before baking.' },
