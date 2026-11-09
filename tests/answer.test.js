@@ -3,36 +3,11 @@ import assert from 'node:assert/strict';
 import { buildIndex, ask, queryTerms, highlightRanges, MIN_COVERAGE } from '../docs/js/answer.js';
 import { extractPages } from '../docs/js/pdf-text.js';
 import { fixture, loadPdfjs } from './helpers.js';
+import { GOOD, OFF_TOPIC } from './questions.js';
 
 const pdfjs = await loadPdfjs();
 const { pages } = await extractPages(fixture('sourdough-guide.pdf'), pdfjs);
 const index = buildIndex(pages);
-
-// Questions a reader would really ask, with a phrase the answer must contain and the page it is on.
-const GOOD = [
-  ['How long does it take to make a starter?', 'about seven days', 1],
-  ['What temperature should the starter be kept at?', 'between 24 and 27 degrees Celsius', 1],
-  ['What does a hungry starter smell like?', 'nail polish', 1],
-  ['How much water is in the basic recipe?', '350 grams of water', 2],
-  ['How much salt do I need?', '10 grams of salt', 2],
-  ['Which flour gives a chewier loaf?', 'Bread flour', 2],
-  ['How long is bulk fermentation?', '4 to 6 hours', 3],
-  ['How long should I cold proof the dough?', '12 to 16 hours', 3],
-  ['What is autolyse?', 'autolyse', 3],
-  ['What temperature do I preheat the Dutch oven to?', '250 degrees Celsius for 45 minutes', 4],
-  ['Why is my loaf dense?', 'starter was not active enough', 4],
-  ['How long should bread cool before slicing?', 'at least one hour', 4],
-  ['How should I store the loaf?', 'cut side down', 4],
-  ['How do I freeze bread?', 'freeze it for up to three months', 4],
-];
-
-const OFF_TOPIC = [
-  'Who won the football world cup in 2018?',
-  'What is the capital of France?',
-  'How do I change a flat tire?',
-  'How much does a loaf of bread cost in London?',
-  'Explain quantum computing',
-];
 
 test('indexing the sample guide produces passages on all four pages', () => {
   assert.deepEqual([...new Set(index.chunks.map((c) => c.page))], [1, 2, 3, 4]);
