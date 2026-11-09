@@ -22,7 +22,7 @@ const NUMERIC_Q = /\bhow (long|much|many|hot|cold|often|far|big|heavy|old|tall|d
 const DURATION_Q = /\bhow (long|often)\b|\bwhen\b|\bhow (many|much) (seconds?|minutes?|hours?|days?|weeks?|months?|years?)\b/i;
 
 // Questions like "how long" are answered by a sentence with a number (and a time unit).
-function answerBonus(question, text) {
+export function answerBonus(question, text) {
   let bonus = 0;
   if (NUMERIC_Q.test(question) && NUMBER.test(text)) {
     bonus += 0.3;
@@ -77,7 +77,7 @@ export function highlightRanges(text, terms) {
   return ranges;
 }
 
-const source = (chunk, score, terms) => ({
+export const source = (chunk, score, terms) => ({
   chunkId: chunk.id,
   page: chunk.page,
   heading: chunk.heading,
@@ -87,7 +87,7 @@ const source = (chunk, score, terms) => ({
   headingHighlights: highlightRanges(chunk.heading, terms),
 });
 
-const refusal = (reason, message, sources = []) => ({ status: 'no_answer', reason, message, sources });
+export const refusal = (reason, message, sources = []) => ({ status: 'no_answer', reason, message, sources });
 
 // Best one- or two-sentence window across the top passages. Sentences count the
 // words of their section heading too, since "Bulk fermentation" above a paragraph
