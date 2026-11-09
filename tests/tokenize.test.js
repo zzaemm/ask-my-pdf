@@ -44,6 +44,10 @@ test('handles accents, non-Latin scripts and empty input', () => {
   assert.deepEqual(tokenize('   ...   '), []);
 });
 
+test('extra stopwords are skipped too', () => {
+  assert.deepEqual(tokenize('how long flour', { extraStopwords: new Set(['long']) }), ['flour']);
+});
+
 test('isStopword is case-insensitive', () => {
   assert.equal(isStopword('The'), true);
   assert.equal(isStopword('flour'), false);

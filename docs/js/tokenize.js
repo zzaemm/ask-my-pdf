@@ -26,11 +26,12 @@ export function stem(word) {
   return w;
 }
 
-export function tokenize(text, { keepStopwords = false } = {}) {
+export function tokenize(text, { keepStopwords = false, extraStopwords = null } = {}) {
   const out = [];
   for (const m of String(text).toLowerCase().matchAll(WORD)) {
     const w = m[0];
     if (!keepStopwords && STOPWORDS.has(w)) continue;
+    if (extraStopwords && extraStopwords.has(w)) continue;
     out.push(stem(w));
   }
   return out;
