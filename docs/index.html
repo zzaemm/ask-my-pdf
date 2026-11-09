@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ask my PDF</title>
+  <meta name="description" content="Ask questions about a PDF and get the answer with the page it came from. Runs entirely in your browser; your file is never uploaded.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Ask my PDF</h1>
+    <p class="tagline">Get answers from a document, with the page they came from. Your file never leaves this device.</p>
+  </header>
+
+  <main>
+    <section id="doc" aria-labelledby="doc-h">
+      <h2 id="doc-h">1. Choose a document</h2>
+
+      <div id="drop" class="drop">
+        <p><button type="button" id="pick" class="primary">Choose a PDF</button></p>
+        <p class="hint">or drop one here</p>
+        <p><button type="button" id="sample" class="link">Try the sample sourdough guide</button></p>
+        <input type="file" id="file" accept="application/pdf,.pdf" hidden>
+      </div>
+
+      <p id="status" role="status" aria-live="polite"></p>
+      <progress id="progress" max="100" value="0" hidden aria-label="Progress"></progress>
+
+      <div id="loaded" class="loaded" hidden>
+        <div><strong id="docname"></strong> <span id="docinfo"></span></div>
+        <button type="button" id="change" class="link">Change</button>
+      </div>
+
+      <label class="smart">
+        <input type="checkbox" id="smart">
+        <span><strong>Smarter search</strong> (optional)<br>
+        <small>Understands different wording, like "how hot" for "250 degrees". Downloads a 23&nbsp;MB model once; it then runs on your device and works offline.</small></span>
+      </label>
+    </section>
+
+    <section id="qa" aria-labelledby="qa-h" hidden>
+      <h2 id="qa-h">2. Ask a question</h2>
+      <form id="ask" autocomplete="off">
+        <label for="q" class="sr">Your question</label>
+        <div class="row">
+          <input id="q" type="text" placeholder="e.g. how long should the dough rest?" enterkeyhint="search">
+          <button type="submit" class="primary">Ask</button>
+        </div>
+      </form>
+      <ol id="answers" class="answers" aria-live="polite"></ol>
+    </section>
+  </main>
+
+  <footer>
+    <p>Reading and searching happen in your browser. The "smarter search" model is downloaded from the Hugging Face hub the first time it is turned on.
+    <a href="https://github.com/zzaemm/ask-my-pdf">Source and notes on accuracy</a>.</p>
+  </footer>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
