@@ -1,0 +1,12 @@
+{
+  "name": "ask-my-pdf",
+  "version": "1.0.0",
+  "description": "Ask questions about your PDFs and get answers with page citations. Runs entirely in the browser.",
+  "type": "module",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "test": "node --test \"tests/*.test.js\"",
+    "serve": "node scripts/serve.js"
+  }
+}
