@@ -24,10 +24,11 @@ export function splitSentences(text) {
     .filter(Boolean);
 }
 
-// A heading is a short line that does not end like a sentence.
+// A heading is a short line that does not end like a sentence. A "?" is allowed
+// because guides often use question headings ("What is sourdough?").
 export function isHeading(block) {
   const t = block.trim();
-  return t.length > 0 && !t.includes('\n') && wordCount(t) <= 9 && !/[.!?:;,]$/.test(t);
+  return t.length > 0 && !t.includes('\n') && wordCount(t) <= 9 && !/[.!:;,]$/.test(t);
 }
 
 export function chunkPages(pages, { maxWords = 80, overlap = 1 } = {}) {

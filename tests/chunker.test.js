@@ -33,6 +33,7 @@ test('handles empty and whitespace-only text', () => {
 
 test('recognises headings but not sentences or lists', () => {
   assert.equal(isHeading('Mixing and folding'), true);
+  assert.equal(isHeading('What is sourdough?'), true);
   assert.equal(isHeading('Bake it for twenty minutes.'), false);
   assert.equal(isHeading('Ingredients:'), false);
   assert.equal(isHeading('line one\nline two'), false);
