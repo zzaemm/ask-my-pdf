@@ -50,7 +50,7 @@ function hintTerms(question) {
 
 // Rare terms matter more. A term that never occurs in the document counts as an
 // average term, so asking about something the document lacks lowers the coverage.
-function termWeights(index, terms) {
+export function termWeights(index, terms) {
   const known = terms.filter((t) => index.bm25.df.has(t));
   const fallback = known.length ? known.reduce((s, t) => s + index.bm25.idf(t), 0) / known.length : 1;
   return new Map(terms.map((t) => [t, index.bm25.df.has(t) ? index.bm25.idf(t) : fallback]));
@@ -92,7 +92,8 @@ export const refusal = (reason, message, sources = []) => ({ status: 'no_answer'
 // Best one- or two-sentence window across the top passages. Sentences count the
 // words of their section heading too, since "Bulk fermentation" above a paragraph
 // is part of what its sentences are about.
-export function pickSentences(index, hits, terms, weights, question = '') {
+// `extra(hit, from, to)` can add to a window's score; the smarter search uses it for meaning.
+export function pickSentences(index, hits, terms, weights, question = '', extra = () => 0) {
   const hints = hintTerms(question);
   let best = null;
   hits.forEach((hit, rank) => {
@@ -107,7 +108,7 @@ export function pickSentences(index, hits, terms, weights, question = '') {
         const words = new Set(tokenize(text, { keepStopwords: true }));
         const echoed = Math.min(2, hints.filter((h) => words.has(h)).length);
         // a second sentence must earn its place: it costs a little
-        const score = cov + answerBonus(question, text) + 0.1 * echoed - 0.05 * (to - from);
+        const score = cov + answerBonus(question, text) + 0.1 * echoed - 0.05 * (to - from) + extra(hit, from, to);
         // a better-ranked passage breaks ties
         if (!best || score > best.score + 1e-9 || (Math.abs(score - best.score) < 1e-9 && rank < best.rank)) {
           best = { from, to, cov, score, hit, rank, chunk };
